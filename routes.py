@@ -5,8 +5,6 @@ colorama.init(autoreset=True)
 import sqlite3
 
 app = Flask(__name__)
-
-
 @app.route('/')
 def home():
     header = "Home"
@@ -42,10 +40,17 @@ def subject_selection():
     return render_template("subject_selection.html", header=header)
 
 
+
 @app.route('/help')
 def help():
     header = "Help"
     return render_template("help.html", header=header)
+
+@app.route('/technology')
+def technology():
+    header = "tech"
+
+    return render_template("technology.html", header=header)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,13 @@
-{% extends 'layout.html' %}
-{% block content %}
-    <body class="subject-body">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <div>
+</head>
+<body>
+    
        <div class="tech">
         <button><a href="/technology" class="sub">technology</a></button>
     </div>
@@ -16,13 +22,13 @@
 
 
  
-     <!-- Search Bar -->
+    
  <div class="search-container">
     <input type="text" id="searchInput" placeholder="Search..." class="search-bar">
     <button class="search-button" onclick="handleSearch()">Search</button>
 </div>
 
-<!-- Add this script before closing body tag -->
+
 <script>
 function handleSearch() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -39,7 +45,7 @@ function handleSearch() {
         'tech': '/technology'
     };
     
-    // Check for matches
+    
     for (const [keyword, url] of Object.entries(searchMap)) {
         if (searchTerm.includes(keyword)) {
             window.location.href = url;
@@ -47,16 +53,16 @@ function handleSearch() {
         }
     }
     
-    // If no match found
+  
     
 }
 
-// Handle Enter key press
+
 document.getElementById('searchInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         handleSearch();
     }
 });
-</script>
-    </body>
-{% endblock %}
+</body>
+</html>
+   

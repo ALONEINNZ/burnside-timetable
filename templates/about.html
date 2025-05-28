@@ -5,7 +5,7 @@
     <button class="search-button" onclick="handleSearch()">Search</button>
 </div>
 
-<!-- Add this script before closing body tag -->
+
 <script>
 function handleSearch() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -21,19 +21,17 @@ function handleSearch() {
         'pizza': '/pizza'
     };
     
-    // Check for matches
     for (const [keyword, url] of Object.entries(searchMap)) {
         if (searchTerm.includes(keyword)) {
             window.location.href = url;
             return;
         }
     }
-    
-    // If no match found
+
     
 }
 
-// Handle Enter key press
+
 document.getElementById('searchInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
         handleSearch();

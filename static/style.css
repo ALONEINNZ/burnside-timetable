@@ -10,7 +10,9 @@ body {
 
 
 .tech button{
-    background-color: #062627;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     border: none;
     font-size: 45px;
     font-weight: bold;
@@ -19,7 +21,9 @@ body {
     text-decoration: none;
 }
 .sci button{
-    background-color: #062627;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     border: none;
     font-size: 45px;
     font-weight: bold;
@@ -29,7 +33,9 @@ body {
 }
 
 .building button {
-    background-color: #062627;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     border: none;
     font-size: 45px;
     font-weight: bold;
@@ -42,8 +48,9 @@ body {
     color: white;
 }
 .buttons-seletion button{
-    background-color: #062627;
-    border: none;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     font-size: 45px;
     font-weight: bold;
     cursor: pointer;
@@ -52,7 +59,9 @@ body {
     
 }
 .about button{
-    background-color: #0e402d;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     color: white;
     padding: 20px 20px;
     border: none;
@@ -62,7 +71,9 @@ body {
     transition: transform 0.3s ease; 
 }
 .help button{
-    background-color: #0e402d;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     color: white;
     padding: 20px 20px;
     border: none;
@@ -73,7 +84,9 @@ body {
 }
 
 .subject_selection button{
-    background-color: #0e402d;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     color: white;
     padding: 20px 20px;
     border: none;
@@ -83,7 +96,9 @@ body {
     transition: transform 0.3s ease; 
 }
 .dropdown button {
-    background-color: #0e402d;
+    background-color: #469c7b;
+    border-radius: 1000px;
+    margin: 15px;
     color: white;
     padding: 10px 20px;
     border: none;

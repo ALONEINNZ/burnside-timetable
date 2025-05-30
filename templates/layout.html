@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subject Selection</title>
-
-    <!-- 🛡️ Instant background to prevent white flash -->
     <style>
         html,
         body {
@@ -15,8 +13,6 @@
             margin: 0;
             padding: 0;
         }
-
-        /* 🔥 Preloader overlay */
         #preloader {
             position: fixed;
             top: 0;
@@ -32,7 +28,6 @@
 </head>
 
 <body>
-    <!-- 🔥 Fullscreen preloader to block white screen -->
     <div id="preloader"></div>
 
     <header>{{header}}</header>
@@ -49,6 +44,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="subject_selection">
                 <button><a href="/subject">Subject Selection</a></button>
             </div>
@@ -62,8 +58,6 @@
     </nav>
 
     <main>{% block content %}{% endblock %}</main>
-
-    <!-- ✅ Remove the preloader once page fully loads -->
     <script>
         window.addEventListener('load', () => {
             const loader = document.getElementById('preloader');

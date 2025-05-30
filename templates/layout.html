@@ -13,6 +13,7 @@
             margin: 0;
             padding: 0;
         }
+
         #preloader {
             position: fixed;
             top: 0;
@@ -31,7 +32,9 @@
     <div id="preloader"></div>
 
     <header>{{header}}</header>
-
+    {%if session['pfp'] %}
+    <img src="{{session['pfp']}}" alt="">
+    {%endif%}
     <nav class="navbar">
         <ul>
             <div class="dropdown">

@@ -23,3 +23,5 @@ instance/
 
 # Packages
 node_modules/
+
+.env

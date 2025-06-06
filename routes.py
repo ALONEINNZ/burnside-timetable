@@ -85,5 +85,28 @@ def login():
     return render_template("login.html", header=header, error=error)
 
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    error = None
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+        email = request.form["email"]
+        student_id = request.form["student_id"]
+        # pfp = request.form["pfp"]
+
+        # check if email is correct check if passwords match and if student id match 5 caracters, add to the data base "new user" add signup page "signup.html"
+
+        return redirect(url_for("login"))
+    return render_template("login.html", header="signup", error=error)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

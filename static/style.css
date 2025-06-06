@@ -1,15 +1,41 @@
 body {
     margin: 0;
     font-size: 30px;
-    background-color: #0D1117; 
-    font-weight: bold; /*makes the text bold */ 
+    background-color: #0D1117;
+    font-weight: bold;
+    /*makes the text bold */
 }
+
 .subject-body {
-    color: white;       
+    color: white;
 }
 
+.logout {
+    width: fit-content;
+}
 
-.tech button{
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2%;
+}
+
+.account-signout {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.pfp {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 100%;
+}
+
+.tech button {
     background-color: #469c7b;
     border-radius: 1000px;
     margin: 15px;
@@ -20,7 +46,8 @@ body {
     color: white;
     text-decoration: none;
 }
-.sci button{
+
+.sci button {
     background-color: #469c7b;
     border-radius: 1000px;
     margin: 15px;
@@ -47,7 +74,8 @@ body {
 .sub {
     color: white;
 }
-.buttons-seletion button{
+
+.buttons-seletion button {
     background-color: #00A67E;
     border-radius: 1000px;
     margin: 15px;
@@ -56,9 +84,10 @@ body {
     cursor: pointer;
     color: white;
     text-decoration: none;
-    
+
 }
-.about button{
+
+.about button {
     background-color: #4FB286;
     border-radius: 1000px;
     margin: 15px;
@@ -68,9 +97,10 @@ body {
     font-size: 45px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
-.help button{
+
+.help button {
     background-color: #00A67E;
     border-radius: 1000px;
     margin: 15px;
@@ -80,10 +110,10 @@ body {
     font-size: 45px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
 
-.subject_selection button{
+.subject_selection button {
     background-color: #358e96;
     border-radius: 1000px;
     margin: 15px;
@@ -91,10 +121,11 @@ body {
     padding: 20px 20px;
     border: none;
     cursor: pointer;
-    font-size:50px;
+    font-size: 50px;
     font-weight: bold;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
+
 .dropdown button {
     background-color: #190a5c;
     border-radius: 1000px;
@@ -105,15 +136,16 @@ body {
     cursor: pointer;
     font-size: 45px;
     font-weight: bold;
-    transition: transform 0.3s ease; }
-    
+    transition: transform 0.3s ease;
+}
+
 
 .dropdown a {
     display: block;
     color: black;
     text-decoration: none;
     padding: 15px 20px 15px;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
 
 
@@ -126,15 +158,16 @@ body {
     border-radius: 10%;
 }
 
-.dropdown{
- margin-left: 350px;
+.dropdown {
+    margin-left: 350px;
 }
+
 .dropdown:hover .content {
     display: block;
 }
 
 .dropdown:hover button {
-   transform: scale(1.4);
+    transform: scale(1.4);
 }
 
 
@@ -149,25 +182,25 @@ body {
 
 
 .subject_selection:hover button {
-   transform: scale(1.4);
+    transform: scale(1.4);
 }
 
 .buttons-seletion:hover button {
-   transform: scale(1.4);
+    transform: scale(1.4);
 }
 
 
 .links {
-    display: flex; 
-    gap: 50px; 
-    font-size: 100px; 
-    justify-content: flex-start; 
+    display: flex;
+    gap: 50px;
+    font-size: 100px;
+    justify-content: flex-start;
 }
 
 .links a {
     display: inline-block;
-    margin-right: 15px; 
-    color: rgb(1, 193, 1);  
+    margin-right: 15px;
+    color: rgb(1, 193, 1);
 }
 
 .links a:hover {
@@ -185,11 +218,11 @@ body {
 
 header {
     font-size: 100px;
-    text-align: center; 
+    text-align: center;
     background-color: #161B22;
     color: whitesmoke;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-    padding: 0px 0; 
+    padding: 0px 0;
 }
 
 main {
@@ -204,15 +237,15 @@ main {
     margin: 0;
     overflow: hidden;
     display: flex;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     padding-left: 20px;
-}   
+}
 
 .navbar a {
     color: white;
     text-decoration: none;
-    padding: 15px 11.2  px; 
-    font-size: 35px; 
+    padding: 15px 11.2 px;
+    font-size: 35px;
     display: block;
     text-align: center;
     font-weight: bold;
@@ -223,19 +256,19 @@ main {
 }
 
 footer {
-    visibility: hidden; 
+    visibility: hidden;
 }
 
 
 .search-container {
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
-    margin: 20px auto; 
+    margin: 20px auto;
 }
 
 .search-bar {
-    width: 400px; 
+    width: 400px;
     padding: 15px;
     font-size: 32px;
     font-weight: bold;
@@ -245,19 +278,19 @@ footer {
     background-color: #295135;
     color: white;
     box-shadow: 5px 5px 10px black;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
 
 .search-bar:hover {
-     transform: scale(1.4);
+    transform: scale(1.4);
 }
+
 .search-bar::placeholder {
     color: white;
     opacity: 0.8;
-    
+
 }
 
 .search-button {
-    display: none; 
+    display: none;
 }
-

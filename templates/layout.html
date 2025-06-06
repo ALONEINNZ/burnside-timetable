@@ -30,35 +30,41 @@
 <body>
     <div id="preloader"></div>
 
-    <header>{{header}}</header>
-    {%if session['pfp'] %}
-    <img src="{{session['pfp']}}" alt="">
-    {%endif%}
-    <nav class="navbar">
-        <ul>
-            <div class="dropdown">
-                <button><a href="/">Home</a></button>
-                <div class="content">
-                    <div class="container">
-                        <li><a href="/login">Login</a></li>
-                        <li><a href="connect">Connect</a></li>
-                        <li><a href="https://www.burnside.school.nz/">Burnside</a></li>
+    <header>
+        <div class="header-top"><span>{{header}}</span>
+            {%if session['pfp'] %}
+            <div class="account-signout">
+                <img src="{{url_for('static',filename = 'images/'+ session['pfp'])}}" alt="" class="pfp">
+                <a class="logout" href="/logout">logout</a>
+
+            </div>
+            {%endif%}
+        </div>
+        <nav class="navbar">
+            <ul>
+                <div class="dropdown">
+                    <button><a href="/">Home</a></button>
+                    <div class="content">
+                        <div class="container">
+                            <li><a href="/login">Login</a></li>
+                            <li><a href="connect">Connect</a></li>
+                            <li><a href="https://www.burnside.school.nz/">Burnside</a></li>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="subject_selection">
-                <button><a href="/subject">Subject Selection</a></button>
-            </div>
-            <div class="help">
-                <button><a href="/help">Help</a></button>
-            </div>
-            <div class="about">
-                <button><a href="/about">About</a></button>
-            </div>
-        </ul>
-    </nav>
-
+                <div class="subject_selection">
+                    <button><a href="/subject">Subject Selection</a></button>
+                </div>
+                <div class="help">
+                    <button><a href="/help">Help</a></button>
+                </div>
+                <div class="about">
+                    <button><a href="/about">About</a></button>
+                </div>
+            </ul>
+        </nav>
+    </header>
     <main>{% block content %}{% endblock %}</main>
     <script>
         window.addEventListener('load', () => {
@@ -66,6 +72,7 @@
             if (loader) loader.style.display = 'none';
         });
     </script>
+
 </body>
 
 </html>

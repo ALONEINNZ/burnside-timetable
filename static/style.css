@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-size: 30px;
-    background-color: #062627; 
+    background-color: #0D1117; 
     font-weight: bold; /*makes the text bold */ 
 }
 .subject-body {
@@ -48,7 +48,7 @@ body {
     color: white;
 }
 .buttons-seletion button{
-    background-color: #469c7b;
+    background-color: #00A67E;
     border-radius: 1000px;
     margin: 15px;
     font-size: 45px;
@@ -59,10 +59,10 @@ body {
     
 }
 .about button{
-    background-color: #469c7b;
+    background-color: #4FB286;
     border-radius: 1000px;
     margin: 15px;
-    color: white;
+    color: #295135;
     padding: 20px 20px;
     border: none;
     font-size: 45px;
@@ -71,7 +71,7 @@ body {
     transition: transform 0.3s ease; 
 }
 .help button{
-    background-color: #469c7b;
+    background-color: #00A67E;
     border-radius: 1000px;
     margin: 15px;
     color: white;
@@ -84,7 +84,7 @@ body {
 }
 
 .subject_selection button{
-    background-color: #469c7b;
+    background-color: #358e96;
     border-radius: 1000px;
     margin: 15px;
     color: white;
@@ -96,7 +96,7 @@ body {
     transition: transform 0.3s ease; 
 }
 .dropdown button {
-    background-color: #469c7b;
+    background-color: #190a5c;
     border-radius: 1000px;
     margin: 15px;
     color: white;
@@ -123,6 +123,7 @@ body {
     background-color: #295135;
     min-width: 150px;
     box-shadow: 15px 15px rgba(0, 0, 0, 0.7);
+    border-radius: 10%;
 }
 
 .dropdown{
@@ -134,7 +135,6 @@ body {
 
 .dropdown:hover button {
    transform: scale(1.4);
-    
 }
 
 
@@ -158,15 +158,15 @@ body {
 
 
 .links {
-    display: flex; /* Makes items appear in a row */
-    gap: 50px; /* Adjusted space between links */
-    font-size: 100px; /*font size */ 
-    justify-content: flex-start; /* Align items more to the left */
+    display: flex; 
+    gap: 50px; 
+    font-size: 100px; 
+    justify-content: flex-start; 
 }
 
 .links a {
     display: inline-block;
-    margin-right: 15px; /* Space between links */
+    margin-right: 15px; 
     color: rgb(1, 193, 1);  
 }
 
@@ -180,15 +180,16 @@ body {
 
 .container {
     display: grid;
+
 }
 
 header {
-    font-size: 150px;
-    text-align: center; /* Keep header centered */
-    background-color: #295135;
+    font-size: 100px;
+    text-align: center; 
+    background-color: #161B22;
     color: whitesmoke;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-    padding: 0px 0; /* Optional: adds some spacing around the text */
+    padding: 0px 0; 
 }
 
 main {
@@ -198,20 +199,20 @@ main {
 
 .navbar ul {
     list-style-type: none;
-    background-color: #0e402d;
-    padding: 0;
+    background-color: #161B22;
+    padding: 1;
     margin: 0;
     overflow: hidden;
     display: flex;
-    justify-content: flex-start; /* Align navbar items more to the left */
+    justify-content: flex-start; 
     padding-left: 20px;
 }   
 
 .navbar a {
     color: white;
     text-decoration: none;
-    padding: 15px 11.2  px; /* Increase padding for navbar links */
-    font-size: 35px; /* Increase font size */
+    padding: 15px 11.2  px; 
+    font-size: 35px; 
     display: block;
     text-align: center;
     font-weight: bold;
@@ -222,19 +223,19 @@ main {
 }
 
 footer {
-    visibility: hidden; /* Retains space instead of removing footer completely */
+    visibility: hidden; 
 }
 
-/* Search Bar Styling */
+
 .search-container {
     display: flex;
-    justify-content: center; /* Centers the search bar */
+    justify-content: center; 
     align-items: center;
-    margin: 20px auto; /* Adds space around */
+    margin: 20px auto; 
 }
 
 .search-bar {
-    width: 400px; /* Adjust width as needed */
+    width: 400px; 
     padding: 15px;
     font-size: 32px;
     font-weight: bold;
@@ -257,6 +258,6 @@ footer {
 }
 
 .search-button {
-    display: none; /* Hide the search button */
+    display: none; 
 }
 

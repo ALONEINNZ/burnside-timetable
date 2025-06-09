@@ -5,6 +5,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 import colorama
 from colorama import Fore, Back, Style
 from flask.cli import load_dotenv
+from flask_bcrypt import check_password_hash
 
 colorama.init(autoreset=True)
 import sqlite3
@@ -69,14 +70,14 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        conn = sqlite3.connect("main.db")
+        conn = sqlite3.connect("users.db")
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users")
         users = cursor.fetchall()
         conn.close()
         for user in users:
             if username == user[1]:
-                if password == user[2]:
+                if password == user[3]:
                     session["username"] = username
                     session["pfp"] = user[3]
                     flash("You were successfully logged in")
@@ -90,7 +91,6 @@ def logout():
     session.clear()
     return redirect(url_for("home"))
 
-
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     error = None
@@ -100,11 +100,13 @@ def signup():
         confirm_password = request.form["confirm_password"]
         email = request.form["email"]
         student_id = request.form["student_id"]
+
+    
         # pfp = request.form["pfp"]
 
         # check if email is correct check if passwords match and if student id match 5 caracters, add to the data base "new user" add signup page "signup.html"
 
-        return redirect(url_for("login"))
+        return redirect(url_for("login"))   
     return render_template("login.html", header="signup", error=error)
 
 

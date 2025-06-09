@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subject Selection</title>
+
+    <!-- Updated Font Awesome to version 6.5.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
         html,
         body {
@@ -31,19 +34,19 @@
     <div id="preloader"></div>
 
     <header>
-        <div class="header-top"><span>{{header}}</span>
-            {%if session['pfp'] %}
+        <div class="header-top">
+            <span>{{header}}</span>
+            {% if session['pfp'] %}
             <div class="account-signout">
-                <img src="{{url_for('static',filename = 'images/'+ session['pfp'])}}" alt="" class="pfp">
+                <img src="{{ url_for('static', filename='images/' + session['pfp']) }}" alt="" class="pfp">
                 <a class="logout" href="/logout">logout</a>
-
             </div>
-            {%endif%}
+            {% endif %}
         </div>
         <nav class="navbar">
             <ul>
                 <div class="dropdown">
-                    <button><a href="/">Home</a></button>
+                    <button><i class="fa-solid fa-house"></i><a href="/">Home</a></button>
                     <div class="content">
                         <div class="container">
                             <li><a href="/login">Login</a></li>
@@ -65,14 +68,14 @@
             </ul>
         </nav>
     </header>
+
     <main>{% block content %}{% endblock %}</main>
+
     <script>
         window.addEventListener('load', () => {
             const loader = document.getElementById('preloader');
             if (loader) loader.style.display = 'none';
         });
     </script>
-
 </body>
-
 </html>

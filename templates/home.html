@@ -6,40 +6,62 @@
     <button class="search-button" onclick="handleSearch()">Search</button>
 </div>
 
+<ul id="suggestions" style="list-style: none; padding-left: 0; color: white; margin-top: 10px;"></ul>
+
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
 <script>
+    const pages = [
+        { title: "Technology", url: "/technology" },
+        { title: "Home", url: "/" },
+        { title: "About", url: "/about" },
+        { title: "Help", url: "/help" },
+        { title: "Connect", url: "/connect" },
+        { title: "Pizza", url: "/pizza" },
+        { title: "subject_selection", url: "/subject"},
+        { title: "login", url: "/login"},
+        { title: "google", url: "https://google.com"},
+        { title: "burnside high school", url: "https://burnside.school.nz"}
+    ];
+
+    const fuse = new Fuse(pages, {
+        keys: ['title'],
+        threshold: 0.4 // Lower = stricter match, higher = fuzzier
+    });
+
     function handleSearch() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-
-        const searchMap = {
-            'about': '/about',
-            'help': '/help',
-            'subject': '/subject',
-            'home': '/',
-            'login': 'login.html',
-            'connect': 'connect.html',
-            'burnside': 'https://www.burnside.school.nz/',
-            'pizza': '/pizza',
-            'technology': '/technology'
-        };
-
-
-        for (const [keyword, url] of Object.entries(searchMap)) {
-            if (searchTerm.includes(keyword)) {
-                window.location.href = url;
-                return;
-            }
+        const input = document.getElementById("searchInput").value;
+        const results = fuse.search(input);
+        if (results.length > 0) {
+            window.location.href = results[0].item.url;
         }
-
-
-
     }
 
+    function showSuggestions() {
+        const input = document.getElementById("searchInput").value;
+        const suggestionsBox = document.getElementById("suggestions");
+        suggestionsBox.innerHTML = '';
 
-    document.getElementById('searchInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
+        if (input.length === 0) return;
+
+        const results = fuse.search(input);
+        results.slice(0, 5).forEach(result => {
+            const li = document.createElement("li");
+            li.textContent = result.item.title;
+            li.style.cursor = "pointer";
+            li.style.padding = "4px 0";
+            li.onclick = () => window.location.href = result.item.url;
+            suggestionsBox.appendChild(li);
+        });
+    }
+
+    document.getElementById("searchInput").addEventListener("input", showSuggestions);
+    document.getElementById("searchInput").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
             handleSearch();
         }
     });
 </script>
+
 {% endblock %}

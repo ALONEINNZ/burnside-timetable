@@ -18,16 +18,15 @@
         { title: "About", url: "/about" },
         { title: "Help", url: "/help" },
         { title: "Connect", url: "/connect" },
-        { title: "Pizza", url: "/pizza" },
-        { title: "subject_selection", url: "/subject"},
-        { title: "login", url: "/login"},
-        { title: "google", url: "https://google.com"},
-        { title: "burnside high school", url: "https://burnside.school.nz"}
+        { title: "subject_selection", url: "/subject" },
+        { title: "login", url: "/login" },
+        { title: "google", url: "https://google.com" },
+        { title: "burnside high school", url: "https://burnside.school.nz" }
     ];
 
     const fuse = new Fuse(pages, {
         keys: ['title'],
-        threshold: 0.4 
+        threshold: 0.4
     });
 
     function handleSearch() {

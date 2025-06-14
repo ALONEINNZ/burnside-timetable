@@ -12,7 +12,7 @@ instance/
 
 # Flask specific
 *.log
-*.db
+
 *.sqlite
 
 # OS or Editor files

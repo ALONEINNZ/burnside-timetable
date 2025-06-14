@@ -5,7 +5,8 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 import colorama
 from colorama import Fore, Back, Style
 from flask.cli import load_dotenv
-from flask_bcrypt import check_password_hash
+
+# from flask_bcrypt import check_password_hash
 
 colorama.init(autoreset=True)
 import sqlite3
@@ -70,18 +71,17 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        conn = sqlite3.connect("users.db")
+        conn = sqlite3.connect("main.db")
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users")
         users = cursor.fetchall()
         conn.close()
         for user in users:
-            if username == user[1]:
-                if password == user[3]:
-                    session["username"] = username
-                    session["pfp"] = user[3]
-                    flash("You were successfully logged in")
-                    return redirect(url_for("home"))
+            if username == user[1] and password == user[2]:
+                session["username"] = username
+                session["pfp"] = user[3]
+                flash("You were successfully logged in")
+                return redirect(url_for("home"))
         error = "invald username/password"
     return render_template("login.html", header=header, error=error)
 
@@ -90,6 +90,7 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("home"))
+
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -100,14 +101,41 @@ def signup():
         confirm_password = request.form["confirm_password"]
         email = request.form["email"]
         student_id = request.form["student_id"]
+        if password != confirm_password:
+            error = "passwords don't match!"
+            return render_template("signup.html", header="signup", error=error)
+        if (
+            not email.endswith("@burnside.school.nz")
+            or email.split("@")[0] != student_id
+        ):
+            error = "invalid email needs to be @burnside"
+            return render_template("signup.html", header="signup", error=error)
+        if len(student_id) != 5 or not student_id.isdigit():
+            error = "invalid student id"
+            return render_template("signup.html", header="signup", error=error)
+        conn = sqlite3.connect("main.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users")
+        users = cursor.fetchall()
+        conn.close()
+        for user in users:
+            if username == user[1] or student_id == user[4]:
+                error = "user already exists"
+                return render_template("signup.html", header="signup", error=error)
+        print("kwjhehbfkwahbfkjwaeckjwBN")
+        conn = sqlite3.connect("main.db")
+        cursor = conn.cursor()
+        sql = "INSERT INTO users(username, password, student_id, email) VALUES(?,?,?,?)"
+        cursor.execute(sql, (username, password, student_id, email))
+        conn.commit()
+        conn.close()
 
-    
         # pfp = request.form["pfp"]
 
         # check if email is correct check if passwords match and if student id match 5 caracters, add to the data base "new user" add signup page "signup.html"
 
-        return redirect(url_for("login"))   
-    return render_template("login.html", header="signup", error=error)
+        return redirect(url_for("login"))
+    return render_template("signup.html", header="signup", error=error)
 
 
 if __name__ == "__main__":

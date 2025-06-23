@@ -25,3 +25,4 @@ instance/
 node_modules/
 
 .env
+emailhush.json

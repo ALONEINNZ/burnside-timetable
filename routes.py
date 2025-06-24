@@ -132,6 +132,7 @@ def signup():
                 )
                 send_message(service, user_id, message)
                 return redirect(url_for("login"))
+            # fix service and user_id and make sure the emailer is funtioning when signup happens. 
 
             conn.close()
 

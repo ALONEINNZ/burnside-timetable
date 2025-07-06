@@ -152,7 +152,10 @@ def signup():
                 conn.commit()
                 conn.close()
                 send_email(email, key)
-                return redirect(url_for("login"))
+                return render_template(
+                    "login.html", header="login", error="check your email."
+                )
+
             # fix service and user_id and make sure the emailer is funtioning when signup happens.
 
             conn.close()
@@ -174,7 +177,7 @@ def verify(key):
         cursor.execute(sql, (True, user[0]))
         conn.commit()
         conn.close()
-    return redirect(url_for("login"))
+    return render_template("login.html", header="login", error="you are verified")
 
 
 if __name__ == "__main__":

@@ -8,8 +8,6 @@ from pathlib import Path
 from flask_mail import Mail, Message
 import random
 
-from emailer import create_email, send_message
-
 colorama.init(autoreset=True)
 
 # Load environment variables

@@ -14,6 +14,8 @@ colorama.init(autoreset=True)
 dotenv_path = Path(".env")
 load_dotenv(dotenv_path)
 
+
+
 app = Flask(__name__)
 app.secret_key = os.getenv("KEY")
 
@@ -57,6 +59,14 @@ def pizza():
     pizzas = cursor.fetchall()
     conn.close()
     return render_template("pizzas.html", header="pizza", pizzas=pizzas)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404 
+
+@app.route('/search_doesnt_exist')
+def search_not_found():
+    return render_template("search_doesnt_exist.html"), 404
 
 
 @app.route("/about")

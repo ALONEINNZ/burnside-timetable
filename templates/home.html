@@ -29,13 +29,18 @@
         threshold: 0.4
     });
 
-    function handleSearch() {
-        const input = document.getElementById("searchInput").value;
-        const results = fuse.search(input);
-        if (results.length > 0) {
-            window.location.href = results[0].item.url;
-        }
+ function handleSearch() {
+    const input = document.getElementById("searchInput").value.trim();
+    const results = fuse.search(input);
+
+    if (results.length > 0) {
+        // Redirect to the first best match
+        window.location.href = results[0].item.url;
+    } else {
+        // No results found, redirect to 404 none existant  
+        window.location.href = "/search_doesnt_exist"
     }
+}
 
     function showSuggestions() {
         const input = document.getElementById("searchInput").value;

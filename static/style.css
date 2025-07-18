@@ -58,6 +58,14 @@ body {
     gap: 0.4rem;
 }
 
+.signup {
+    display: none;
+    position: absolute;
+    background-color: #245055;
+    min-width: 190px;
+    box-shadow: 15px 15px rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+}
 .pfp {
     height: 4rem;
     width: 4rem;

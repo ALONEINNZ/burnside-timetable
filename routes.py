@@ -62,12 +62,15 @@ def pizza():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404 
+    return render_template('404.html'), 404
 
 @app.route('/search_doesnt_exist')
 def search_not_found():
     return render_template("search_doesnt_exist.html"), 404
 
+@app.errorhandler(500)
+def server_err(err):
+    return render_template("500.html"), 500
 
 @app.route("/about")
 def about():
@@ -101,18 +104,19 @@ def login():
         cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
         user = cursor.fetchone()
         conn.close()
-        print(user[7])
-        if user[7] == 0:
-            error = "not verified check your email!"
-            return render_template("login.html", header="login", error=error)
-        if user and check_password_hash(user[2], password):
-            session["username"] = username
-            session["pfp"] = user[3]
-            flash("You successfully logged in")
-            return redirect(url_for("home"))
-        error = "Invalid username/password"
-    return render_template("login.html", header="login", error=error)
 
+        if user is None:
+            error = "User not found or Not Verified."
+        elif user[5] == 0:  # Assuming index 5 is is_verified (fix if needed)
+            error = "Not verified. Check your email!"
+        elif check_password_hash(user[1], password):  # Assuming index 1 is password
+            session["username"] = username
+            session["pfp"] = user[2]  # Assuming index 2 is profile pic — update if wrong
+            return redirect(url_for("home"))
+        else:
+            error = "Incorrect password."
+
+    return render_template("login.html", header="login", error=error)
 
 @app.route("/logout")
 def logout():
@@ -132,6 +136,8 @@ def signup():
 
         if password != confirm_password:
             error = "Passwords don't match!"
+            len(password) > 1000
+            error = "password is too long!"
         elif (
             not email.endswith("@burnside.school.nz")
             or email.split("@")[0] != student_id

@@ -7,13 +7,13 @@ import os
 from pathlib import Path
 from flask_mail import Mail, Message
 import random
+from werkzeug.utils import secure_filename
 
 colorama.init(autoreset=True)
 
 # Load environment variables
 dotenv_path = Path(".env")
 load_dotenv(dotenv_path)
-
 
 
 app = Flask(__name__)
@@ -26,6 +26,8 @@ app.config["MAIL_USERNAME"] = os.getenv("USERNAME")
 app.config["MAIL_PASSWORD"] = os.getenv("PASSWORD")
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USE_SSL"] = False
+
+app.config["UPLOAD_FOLDER"] = "static/images/"
 
 mail = Mail(app)
 
@@ -60,11 +62,21 @@ def pizza():
     conn.close()
     return render_template("pizzas.html", header="pizza", pizzas=pizzas)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
+<<<<<<< Updated upstream
     return render_template('404.html'), 404
+=======
+<<<<<<< HEAD
+    return render_template("404.html"), 404
+=======
+    return render_template('404.html'), 404
+>>>>>>> 1beba980d089ba837d4b55762503e955c0563dc2
+>>>>>>> Stashed changes
 
-@app.route('/search_doesnt_exist')
+
+@app.route("/search_doesnt_exist")
 def search_not_found():
     return render_template("search_doesnt_exist.html"), 404
 
@@ -92,6 +104,26 @@ def technology():
     return render_template("technology.html", header="tech")
 
 
+@app.route("/account", methods=["GET", "POST"])
+def account():
+    if request.method == "GET":
+        return render_template("account.html", header="account")
+    if "file" not in request.files:
+        flash("no file part")
+    file = request.files["file"]
+    filename = secure_filename(file.filename)
+    if filename != "":
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+    conn = sqlite3.connect("main.db")
+    cursor = conn.cursor()
+    sql = "UPDATE users SET pfp = ? WHERE id = ?"
+    cursor.execute(sql, (filename, session["user_id"]))
+    conn.commit()
+    conn.close()
+    session["pfp"] = filename
+    return redirect(url_for("home"))
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
@@ -104,6 +136,24 @@ def login():
         cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
         user = cursor.fetchone()
         conn.close()
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+        print(user[7])
+        if user[7] == 0:
+            error = "not verified check your email!"
+            return render_template("login.html", header="login", error=error)
+        if user and check_password_hash(user[2], password):
+            session["username"] = username
+            session["pfp"] = user[3]
+            session["user_id"] = user[0]
+            flash("You successfully logged in")
+            return redirect(url_for("home"))
+        error = "Invalid username/password"
+    return render_template("login.html", header="login", error=error)
+=======
+>>>>>>> 1beba980d089ba837d4b55762503e955c0563dc2
+>>>>>>> Stashed changes
 
         if user is None:
             error = "User not found or Not Verified."

@@ -30,6 +30,7 @@ app.config["UPLOAD_FOLDER"] = "static/images/"
 
 mail = Mail(app)
 
+
 # --- LOGIN REQUIRED DECORATOR ---
 def login_required(f):
     @wraps(f)
@@ -37,7 +38,9 @@ def login_required(f):
         if "username" not in session:
             return redirect(url_for("login"))
         return f(*args, **kwargs)
+
     return decorated_function
+
 
 def send_email(user_email, key):
     msg = Message(
@@ -48,13 +51,34 @@ def send_email(user_email, key):
     )
     mail.send(msg)
 
+
+def add_class(name, years, rq_classes):
+    conn = sqlite3.connect("main.db")
+    cursor = conn.cursor()
+    for year in years:
+        sql = "INSERT INTO classes(name, year) VALUES(?,?)"
+        cursor.execute(sql, (name, year))
+        conn.commit()
+        cursor.execute(
+            "SELECT id FROM classes WHERE name = ? AND year = ?", (name, year)
+        )
+        class_id = cursor.fetchone()
+        for rq_class in rq_classes:
+            sql = "INSERT INTO class_classes(class_id, rq_class_id) VALUES(?,?)"
+            cursor.execute(sql, (class_id, rq_class_id))
+            conn.commit()
+    conn.close()
+
+
 @app.route("/")
 def home():
     return render_template("home.html", header="Home")
 
+
 @app.route("/test")
 def test():
     return render_template("test.html", header="Test me")
+
 
 @app.route("/pizza")
 def pizza():
@@ -65,29 +89,36 @@ def pizza():
     conn.close()
     return render_template("pizzas.html", header="pizza", pizzas=pizzas)
 
+
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template("404.html"), 404
 
-@app.route('/search_doesnt_exist')
+
+@app.route("/search_doesnt_exist")
 def search_not_found():
     return render_template("search_doesnt_exist.html"), 404
+
 
 @app.errorhandler(500)
 def server_err(err):
     return render_template("500.html"), 500
 
+
 @app.route("/about")
 def about():
     return render_template("about.html", header="About")
+
 
 @app.route("/subject")
 def subject_selection():
     return render_template("subject_selection.html", header="Subject Selection")
 
+
 @app.route("/help")
 def help():
     return render_template("help.html", header="Help")
+
 
 @app.route("/technology")
 def technology():
@@ -120,6 +151,7 @@ def account():
     session["pfp"] = filename
     return redirect(url_for("home"))
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
@@ -146,10 +178,12 @@ def login():
 
     return render_template("login.html", header="login", error=error)
 
+
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("home"))
+
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -202,6 +236,7 @@ def signup():
 
     return render_template("signup.html", header="signup", error=error)
 
+
 @app.route("/verify/<int:key>")
 def verify(key):
     conn = sqlite3.connect("main.db")
@@ -219,6 +254,7 @@ def verify(key):
         conn.close()
 
     return render_template("login.html", header="login", error="you are verified")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

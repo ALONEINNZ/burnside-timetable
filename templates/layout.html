@@ -40,7 +40,7 @@
             <span>{{header}}</span>
             {% if session['pfp'] %}
             <div class="account-signout">
-                <img src="{{ url_for('static', filename='images/' + session['pfp']) }}" alt="" class="pfp">
+                <img src="{{ url_for('static', filename='images/' + session['pfp']|string) }}" alt="" class="pfp">
                 <a class="logout" href="/logout">logout</a>
             </div>
             {% endif %}

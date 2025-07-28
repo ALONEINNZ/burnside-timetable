@@ -7,10 +7,13 @@
     <label for="password">password</label>
     <input type="password" name="password">
     <button type="submit"> go! </button>
-    <li class="signup1"><a href="/signup"></a>signup</li>
     {% if error %}
     <p>{{error}}</p>
     {%endif%}
 </form>
 
+<p>
+    Don't have an account?
+    <a class="signup-link" href="/signup">Sign up</a>
+</p>
 {% endblock %}

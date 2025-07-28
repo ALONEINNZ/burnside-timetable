@@ -47,27 +47,23 @@
         </div>
         <nav class="navbar">
             <ul>
-                <div class="dropdown">
-                    <button><i class="fa-solid fa-house"></i><a href="/">Home</a></button>
+                <li class="dropdown">
+                    <button><i class="fa-solid fa-house"></i> Home <i class="fa-solid fa-caret-down"></i></button>
                     <div class="content">
-                        <div class="container">
-                            <li><a href="/login">Login</a></li>
-                            <li><a href="connect">Connect</a></li>
-                            <li><a href="https://www.burnside.school.nz/">Burnside</a></li>
-                            <li><a href="/signup">signup</a></li>
-                        </div>
+                        <a href="/">Home</a>
+                        <a href="/account">Account</a>
+                        <a href="/logout">Logout</a>
                     </div>
-                </div>
-
-                <div class="subject_selection">
-                    <button><i class="fa-solid fa-school"></i><a href="/subject">Subject Selection</a></button>
-                </div>
-                <div class="help">
-                    <button><i class="fa-solid fa-comments"></i><a href="/help">Help</a></button>
-                </div>
-                <div class="about">
-                    <button><i class="fa-solid fa-circle-info"></i><a href="/about">About</a></button>
-                </div>
+                </li>
+                <li class="subject_selection">
+                    <a class="nav-btn" href="/subject"><i class="fa-solid fa-school"></i> Subject Selection</a>
+                </li>
+                <li class="help">
+                    <a class="nav-btn" href="/help"><i class="fa-solid fa-comments"></i> Help</a>
+                </li>
+                <li class="about">
+                    <a class="nav-btn" href="/about"><i class="fa-solid fa-circle-info"></i> About</a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -80,6 +76,22 @@
             if (loader) loader.style.display = 'none';
         });
     </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownBtn = document.querySelector('.dropdown > button');
+    const dropdownContent = document.querySelector('.dropdown .content');
+    dropdownBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+    });
+    // Optional: close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!dropdownBtn.contains(e.target) && !dropdownContent.contains(e.target)) {
+            dropdownContent.style.display = 'none';
+        }
+    });
+});
+</script>
 </body>
 
 </html>

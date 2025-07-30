@@ -36,14 +36,8 @@
     <div id="preloader"></div>
 
     <header>
-        <div class="header-top">
-            <span>{{header}}</span>
-            {% if session['pfp'] %}
-            <div class="account-signout">
-                <img src="{{ url_for('static', filename='images/' + session['pfp']|string) }}" alt="" class="pfp">
-                <a class="logout" href="/logout">logout</a>
-            </div>
-            {% endif %}
+        <div class="header-title">
+            {{ header }}
         </div>
         <nav class="navbar">
             <ul>
@@ -66,6 +60,10 @@
                 </li>
             </ul>
         </nav>
+        <div class="header-account">
+            <img src="{{ url_for('static', filename=( 'images/' ~ session.pfp if session.pfp else 'default_pfp.png' )) }}" class="pfp" alt="Profile Picture">
+            <span class="account-username">{{ session.username }}</span>
+        </div>
     </header>
 
     <main>{% block content %}{% endblock %}</main>

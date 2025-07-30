@@ -138,18 +138,22 @@ def account():
     file = request.files["file"]
     filename = secure_filename(file.filename)
 
-    if filename != "":
+    # Check if a file was selected and is not empty
+    if filename and file and file.filename != "":
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
-    conn = sqlite3.connect("main.db")
-    cursor = conn.cursor()
-    sql = "UPDATE users SET pfp = ? WHERE username = ?"
-    cursor.execute(sql, (filename, session["username"]))
-    conn.commit()
-    conn.close()
+        conn = sqlite3.connect("main.db")
+        cursor = conn.cursor()
+        sql = "UPDATE users SET pfp = ? WHERE username = ?"
+        cursor.execute(sql, (filename, session["username"]))
+        conn.commit()
+        conn.close()
 
-    session["pfp"] = filename
-    return redirect(url_for("home"))
+        session["pfp"] = filename
+        return redirect(url_for("home"))
+    else:
+        flash("No file selected")
+        return redirect(request.url)
 
 
 @app.route("/login", methods=["GET", "POST"])

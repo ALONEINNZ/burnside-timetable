@@ -1,12 +1,9 @@
-/* Modern Reset & Base Styles */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Essential for modern layouts */
+    box-sizing: border-box;
     text-decoration: none;
-    /* Use a clean, modern sans-serif font. Montserrat is popular and versatile. */
     font-family: 'Montserrat', sans-serif;
-    /* Smooth transitions for all properties for modern feel */
     transition: all 0.3s ease-in-out;
 }
 
@@ -15,83 +12,101 @@ html {
 }
 
 body {
-    font-size: 1.125rem; /* Slightly larger base font for readability */
-    line-height: 1.7; /* Good line spacing */
-    background: #1a1a1a; /* Dark background for a modern, sleek look (dark mode) */
-    color: #e0e0e0; /* Soft white for text on dark background */
-    display: flex; /* Use flexbox for overall layout */
+    background: url("/static/images/school.jpg") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: #e0e0e0;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Ensure body takes full viewport height */
+    overflow-x: hidden;
+    background-attachment: fixed;
 }
 
-/* Scrollbar Customization (Modern Touch) */
-body::-webkit-scrollbar {
-    width: 10px;
-}
-body::-webkit-scrollbar-track {
-    background: #2a2a2a;
-    border-radius: 5px;
-}
-body::-webkit-scrollbar-thumb {
-    background-color: #1bc47d;
-    border-radius: 5px;
-    border: 2px solid #2a2a2a;
+body::after {
+    content: "";
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0) 60%,
+        rgba(0,0,0,0.9) 95%,
+        #000 100%
+    );
 }
 
-/* Header - Sleek & Prominent */
+.page-bg {
+    position: absolute;
+    top: 100vh;
+    left: 0;
+    width: 100vw;
+    min-height: 200vh;
+    background: #000;
+    z-index: 0;
+}
+
 header {
+    position: relative;
     font-size: 2.8rem;
     font-weight: 700;
     text-align: center;
-    background: #222222; /* Slightly lighter dark shade for header */
-    color: #1bc47d; /* Vibrant green for title */
-    text-shadow: 0 0 15px rgba(27,196,125,0.4); /* Subtle glow effect */
-    padding: 1.5rem 0; /* More vertical padding */
-    height: auto; /* Let content dictate height */
+    background: #222222;
+    color: #1bc47d;
+    text-shadow: 0 0 15px rgba(27,196,125,0.4);
+    padding: 1.5rem 0;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 2px solid #1bc47d; /* Thin vibrant line */
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3); /* Stronger shadow for depth */
-    letter-spacing: 0.1em; /* More pronounced letter spacing */
+    border-bottom: 2px solid #1bc47d;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    letter-spacing: 0.1em;
     position: sticky;
     top: 0;
     z-index: 1000;
-    flex-wrap: wrap; /* Allow header content to wrap */
+    flex-wrap: wrap;
 }
 
 .header-title {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+    width: 100%;
+    text-align: center;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #1bc47d;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
 }
 
 .nz-icon {
     font-size: 2.5rem;
     line-height: 1;
-    color: #e0e0e0; /* Icon color contrasts with title */
+    color: #e0e0e0;
 }
 
-/* Navigation - Clean & Responsive */
 nav.navbar {
-    background: #2a2a2a; /* Darker background for navbar */
+    background: transparent;
     padding: 0.8rem 0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    box-shadow: none;
 }
 
 nav.navbar ul {
     display: flex;
     flex-direction: row;
-    gap: 3rem; /* Increased gap for cleaner look */
+    gap: 3rem;
     list-style: none;
     padding: 0;
     margin: 0;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap; /* Essential for responsiveness */
+    flex-wrap: wrap;
 }
 
-/* Buttons - Modern, Elevated & Interactive */
 .tech button,
 .sci button,
 .building button,
@@ -101,24 +116,23 @@ nav.navbar ul {
 .subject_selection button,
 .dropdown button,
 .nav-btn,
-form button[type="submit"] { /* Apply consistent button styles */
-    font-size: 1.05rem; /* Optimized font size */
-    font-weight: 600; /* Medium bold */
-    border-radius: 0.75rem; /* Slightly less rounded, more modern */
-    background: #1bc47d; /* Vibrant primary green */
-    color: #1a1a1a; /* Dark text on vibrant button */
-    padding: 0.8rem 2.2rem; /* Comfortable padding */
+form button[type="submit"] {
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 0.75rem;
+    background: #1bc47d;
+    color: #1a1a1a;
+    padding: 0.8rem 2.2rem;
     margin: 0.5rem;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(27,196,125,0.4); /* Stronger glow shadow */
-    position: relative; /* For pseudo-elements or subtle effects */
-    overflow: hidden; /* For hover effects */
+    box-shadow: 0 4px 15px rgba(27,196,125,0.4);
+    position: relative;
+    overflow: hidden;
     letter-spacing: 0.05em;
-    text-transform: uppercase; /* Modern touch */
+    text-transform: uppercase;
 }
 
-/* Button Hover Effects - More Dynamic */
 .tech button:hover,
 .sci button:hover,
 .building button:hover,
@@ -129,13 +143,12 @@ form button[type="submit"] { /* Apply consistent button styles */
 .dropdown button:hover,
 .nav-btn:hover,
 form button[type="submit"]:hover {
-    background: #107246; /* Deeper green on hover */
-    color: #fff; /* White text on hover for contrast */
-    transform: translateY(-4px) scale(1.02); /* More pronounced lift */
-    box-shadow: 0 8px 25px rgba(27,196,125,0.6); /* More intense glow on hover */
+    background: #107246;
+    color: #fff;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(27,196,125,0.6);
 }
 
-/* Dropdown - Sleek & Animated */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -144,58 +157,56 @@ form button[type="submit"]:hover {
 .dropdown .content {
     display: none;
     position: absolute;
-    top: calc(100% + 12px); /* Space below button */
-    left: 50%; /* Center dropdown relative to button */
-    transform: translateX(-50%) translateY(20px); /* Initial position for animation */
-    background: #2a2a2a; /* Dark background */
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #2a2a2a;
     color: #e0e0e0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Deep shadow */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     border-radius: 0.75rem;
     z-index: 100;
-    min-width: 220px; /* Wider dropdown */
+    min-width: 220px;
     opacity: 0;
-    pointer-events: none; /* Disable interaction until visible */
-    padding: 0.5rem 0; /* Internal padding */
+    pointer-events: none;
+    padding: 0.5rem 0;
 }
 
 .dropdown:hover .content,
 .dropdown:focus-within .content {
     display: block;
     opacity: 1;
-    transform: translateX(-50%) translateY(0); /* Animate to final position */
-    pointer-events: auto; /* Enable interaction */
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
 }
 
 .dropdown .content a {
     color: #e0e0e0;
     padding: 12px 20px;
     display: block;
-    border-radius: 0.5rem; /* Rounded corners for individual items */
+    border-radius: 0.5rem;
     font-size: 1rem;
     transition: background 0.2s ease-in-out, color 0.2s;
-    text-align: left; /* Align text within dropdown */
+    text-align: left;
 }
 
 .dropdown .content a:hover {
     background: #1bc47d;
-    color: #1a1a1a; /* Dark text on green hover */
+    color: #1a1a1a;
 }
 
-/* Miscellaneous - Modern Touches */
 .pfp {
-    height: 5rem; /* Larger profile picture */
-    width: 5rem;
-    border-radius: 50%; /* Perfect circle */
-    border: 3px solid #1bc47d; /* Vibrant border */
-    box-shadow: 0 0 15px rgba(27,196,125,0.5); /* Glow effect */
-    object-fit: cover; /* Ensures image covers area without distortion */
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #1bc47d;
 }
 
 .header-top {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 3rem; /* Increased gap */
+    gap: 3rem;
 }
 
 .account-signout {
@@ -204,82 +215,175 @@ form button[type="submit"]:hover {
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    color: #b0b0b0; /* Lighter grey for secondary text */
+    color: #b0b0b0;
 }
 
 footer {
-    /* Kept hidden as per your original, but for a modern site, a subtle footer is key */
-    /* If visible: */
-    /* margin-top: auto; /* Pushes footer to bottom */
-    /* background: #222222;
-    color: #b0b0b0;
-    text-align: center;
-    padding: 1.5rem 0;
-    font-size: 0.9rem;
-    border-top: 1px solid #2a2a2a;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1); */
-    visibility: hidden; /* Keeping original instruction */
+    visibility: hidden;
 }
 
 .signup-link {
-    color: #1bc47d; /* Vibrant link color */
+    color: #1bc47d;
     font-weight: bold;
-    text-decoration: none; /* No underline by default */
+    text-decoration: none;
     transition: color 0.2s ease-in-out, text-shadow 0.2s;
 }
 
 .signup-link:hover {
-    color: #107246; /* Deeper green on hover */
-    text-shadow: 0 0 5px rgba(27,196,125,0.5); /* Subtle glow on hover */
-    text-decoration: underline; /* Underline on hover */
+    color: #107246;
+    text-shadow: 0 0 5px rgba(27,196,125,0.5);
+    text-decoration: underline;
 }
 
-/* Forms - Clean & Focused */
 form {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem; /* More space between form elements */
-    max-width: 450px; /* Slightly wider forms */
-    margin: 4rem auto; /* More vertical margin */
-    background: #2a2a2a; /* Dark background for the form card */
-    padding: 2.5rem 3rem; /* More padding */
-    border-radius: 1.5rem; /* Modern rounded corners */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Stronger, diffused shadow */
-    border: 1px solid rgba(27,196,125,0.2); /* Subtle accent border */
+    gap: 1.5rem;
+    max-width: 450px;
+    margin: 4rem auto;
+    background: #2a2a2a;
+    padding: 2.5rem 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
 form label {
     font-size: 1.1rem;
-    color: #e0e0e0; /* White text for labels */
-    font-weight: 500; /* Slightly lighter weight */
-    margin-bottom: -0.5rem; /* Pull label closer to input */
+    color: #e0e0e0;
+    font-weight: 500;
+    margin-bottom: -0.5rem;
 }
 
 form input[type="text"],
 form input[type="password"] {
-    padding: 0.9rem 1.2rem; /* Generous padding */
-    border-radius: 0.75rem; /* Consistent rounded corners */
-    border: 1px solid #444; /* Darker, subtle border */
+    padding: 0.9rem 1.2rem;
+    border-radius: 0.75rem;
+    border: 1px solid #444;
     font-size: 1rem;
-    background-color: #333; /* Dark input background */
-    color: #e0e0e0; /* Light text in inputs */
-    outline: none; /* Remove default outline */
+    background-color: #333;
+    color: #e0e0e0;
+    outline: none;
 }
 
 form input[type="text"]:focus,
 form input[type="password"]:focus {
-    border-color: #1bc47d; /* Vibrant green border on focus */
-    box-shadow: 0 0 0 3px rgba(27,196,125,0.5); /* Stronger glow on focus */
-    background-color: #3a3a3a; /* Slightly lighter background on focus */
+    border-color: #1bc47d;
+    box-shadow: 0 0 0 3px rgba(27,196,125,0.5);
+    background-color: #3a3a3a;
 }
 
-/* Placeholders - Subtle */
 ::placeholder {
-    color: #888; /* Softer placeholder text */
+    color: #888;
     opacity: 0.8;
 }
 
-/* Responsive Design - Essential for Modern Web */
+.search-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.search-bar {
+    width: 18rem;
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 2rem 0 0 2rem;
+    background: #232323;
+    color: #1bc47d;
+    box-shadow: 0 2px 12px rgba(27,196,125,0.10);
+    outline: none;
+    transition: box-shadow 0.3s, background 0.2s, color 0.2s;
+    display: inline-block;
+}
+
+.search-button {
+    padding: 0.7rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0 2rem 2rem 0;
+    background: #1bc47d;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 12px rgba(27,196,125,0.10);
+    margin-left: -4px;
+    display: inline-block;
+}
+
+.search-button:hover {
+    background: #107246;
+    transform: scale(1.05);
+}
+
+#suggestions {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18rem;
+    background: #232323;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow: 0 2px 12px rgba(27,196,125,0.10);
+    z-index: 10;
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#suggestions li {
+    color: #1bc47d;
+    padding: 0.6rem 1.2rem;
+    width: 100%;
+    text-align: center;
+    border-radius: 1rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    list-style: none;
+}
+
+#suggestions li:hover {
+    background: #1bc47d;
+    color: #232323;
+}
+
+.header-account {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    z-index: 1001;
+}
+
+.account-username {
+    color: #1bc47d;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+}
+
+.main-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 120vh auto 2rem auto; /* Push text below image/fade */
+    background: none; /* No background, so text is on black */
+    border-radius: 0;
+    padding: 2rem 2.5rem;
+    box-shadow: none;
+    color: #e0e0e0;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    /* border: 1px solid rgba(27,196,125,0.2); <-- Remove this line */
+}
+
 @media (max-width: 1024px) {
     body {
         font-size: 1rem;
@@ -327,6 +431,11 @@ form input[type="password"]:focus {
         margin: 2rem auto;
         padding: 2rem;
     }
+
+    .search-bar {
+        width: 100%;
+        max-width: 400px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -346,7 +455,7 @@ form input[type="password"]:focus {
     }
 
     nav.navbar ul {
-        flex-direction: column; /* Stack navigation items vertically */
+        flex-direction: column;
         gap: 1.2rem;
         padding: 1rem 0;
     }
@@ -364,20 +473,20 @@ form input[type="password"]:focus {
         font-size: 0.9rem;
         padding: 0.6rem 1.5rem;
         margin: 0.3rem;
-        width: calc(100% - 1rem); /* Make buttons full width minus margin */
-        max-width: 300px; /* Limit button width */
+        width: calc(100% - 1rem);
+        max-width: 300px;
     }
 
     .dropdown .content {
-        position: static; /* Allow dropdown to flow with content */
+        position: static;
         transform: none;
         box-shadow: none;
         border-radius: 0;
-        background: #333; /* Slightly different background for nested content */
+        background: #333;
         width: 100%;
         min-width: unset;
-        text-align: center; /* Center dropdown items */
-        padding: 0; /* Remove padding here, add to links */
+        text-align: center;
+        padding: 0;
     }
 
     .dropdown .content a {
@@ -387,8 +496,8 @@ form input[type="password"]:focus {
 
     .dropdown:hover .content,
     .dropdown:focus-within .content {
-        opacity: 1; /* Still fade in */
-        transform: none; /* No slide animation on mobile */
+        opacity: 1;
+        transform: none;
     }
 
     .pfp {
@@ -406,6 +515,11 @@ form input[type="password"]:focus {
         max-width: 95%;
         padding: 1.5rem;
         margin: 1.5rem auto;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: 350px;
     }
 }
 
@@ -426,7 +540,8 @@ form input[type="password"]:focus {
     form input[type="password"] {
         padding: 0.7rem 1rem;
     }
+    .search-bar {
+        width: 100%;
+        max-width: 280px;
+    }
 }
-
-/* Optional: Add Google Font Link to your HTML <head> */
-/* <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"> */

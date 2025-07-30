@@ -4,10 +4,8 @@
 <div class="search-container">
     <input type="text" id="searchInput" placeholder="Search..." class="search-bar">
     <button class="search-button" onclick="handleSearch()">Search</button>
+    <div id="suggestions"></div>
 </div>
-
-<ul id="suggestions" style="list-style: none; padding-left: 0; color: white; margin-top: 10px;"></ul>
-
 
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 
@@ -21,7 +19,11 @@
         { title: "subject_selection", url: "/subject" },
         { title: "login", url: "/login" },
         { title: "google", url: "https://google.com" },
-        { title: "burnside high school", url: "https://burnside.school.nz" }
+        { title: "burnside high school", url: "https://burnside.school.nz" },
+        { title: "signup", url: "/signup" },
+        { title: "burnside high school news", url: "/burnside_high_school_news" },
+        { title: "burnside high school events", url: "/burnside_high_school_events" },
+        { title: "burnside high school achievements", url: "/burnside_high_school_achievements" }
     ];
 
     const fuse = new Fuse(pages, {
@@ -67,5 +69,34 @@
         }
     });
 </script>
+
+<main>
+    <div class="main-content">
+        <h2>Burnside High School</h2>
+        <p>
+            Burnside High School is one of the largest secondary schools in New Zealand, located in the northwestern suburb of Burnside, Christchurch. Founded in 1960, the school serves students from Years 9 to 13 and is known for its academic excellence, cultural diversity, and strong extracurricular programs.
+        </p>
+        <p>
+            Burnside High has a proud tradition of success across various fields, including music, performing arts, sports, and science. Its four divisions—North, South, West, and Senior—help manage its large student population efficiently, while still fostering a sense of community and identity.
+        </p>
+        <p>
+            The school’s facilities include well-equipped classrooms, a performing arts centre, science labs, and extensive sports grounds. It is especially renowned for its music program, with ensembles such as the Burnside High School Orchestra and Big Band receiving national recognition.
+        </p>
+        <p>
+            Burnside High has produced many notable alumni, including musicians, athletes, scientists, and public figures, reflecting the school’s commitment to helping students excel in all areas of life.
+        </p>
+    </div>
+    <div class="page-bg"></div>
+    <div class="main-content">
+        <h2>Latest Updates</h2>
+        <p>
+            <!-- Add more news, links, and updates here. This section will be on a pure black background. -->
+        </p>
+        <p>
+            More info about upcoming events, achievements, and school news will appear here.
+        </p>
+        <!-- Add as much content as you want! -->
+    </div>
+</main>
 
 {% endblock %}

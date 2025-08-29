@@ -2,9 +2,11 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
@@ -27,6 +29,7 @@
     <table>
         <thead>
             <tr>
+                <th>id</th>
                 <th>class Name</th>
                 <th>years</th>
                 <th>is_mandatory</th>
@@ -37,11 +40,21 @@
         <tbody>
             {% for subject in subjects %}
             <tr>
-                <td>{{ subject[0] }}</td>
-                <td>{{ subject[1] }}</td>
-                <td>{% if subject[2] == 0 %} no {% else %} yes {%endif%}</td>
-                <td>{{ subject[3] }}</td>
-                <td>{{ jobs}} </td>
+                <td>{{ subject["id"] }}</td>
+                <td>{{ subject["name"] }}</td>
+                <td>{{ subject["year"] }}</td>
+                <td>{% if subject["is_mandatory"] == 0 %} no {% else %} yes {%endif%}</td>
+                <td>{{ subject["prerequisites"] }}</td>
+                <td class="jobs-td">
+                    {% for job in subject["jobs"] %}
+                    <div>
+                        {{ job[1] }}
+                        <form action="/remove-job-from-class/{{subject['id']}}/{{job[0]}}" method="post"><button
+                                type="submit">x</button></form>
+
+                    </div>
+                    {% endfor %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

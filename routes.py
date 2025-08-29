@@ -134,16 +134,6 @@ def add_jobs_from_file(file_name):
             add_job(name, int(avg_salary), area)
 
 
-# def set_req_classes(class_id, req_class_ids):
-#     conn = sqlite3.connect("main.db")
-#     cursor = conn.cursor()
-#     for req_class_id in req_class_ids:
-#         sql = "INSERT INTO class_classes(class_id, req_class_id) VALUES(?,?)"
-#         cursor.execute(sql, (class_id, req_class_id))
-#         conn.commit()
-#     conn.close()
-
-
 @app.route("/")
 def home():
     return render_template("home.html", header="Home")
@@ -152,6 +142,7 @@ def home():
 @app.get("/admin")
 @login_required
 def admin():
+    """Admin page to view and update classes and jobs."""
     if not session["code"].isdigit() or session["code"] == "22298":
         with sqlite3.connect("main.db") as conn:
             cursor = conn.cursor()
@@ -165,7 +156,7 @@ def admin():
             with sqlite3.connect("main.db") as conn:
                 cursor = conn.cursor()
                 cursor.execute(
-                    "SELECT name FROM jobs WHERE id IN (SELECT job_id FROM job_classes WHERE class_id = ?)",
+                    "SELECT id,name FROM jobs WHERE id IN (SELECT job_id FROM job_classes WHERE class_id = ?)",
                     (class_[0],),
                 )
                 jobs = cursor.fetchall()
@@ -176,7 +167,7 @@ def admin():
                     "year": class_[2],
                     "is_mandatory": class_[3],
                     "prerequisites": class_[4],
-                    "jobs": [job[0] for job in jobs],
+                    "jobs": jobs,
                 }
             )
         return render_template("admin.html", header="Admin", subjects=subjects)
@@ -184,8 +175,24 @@ def admin():
         abort(404)
 
 
+@app.post("/remove-job-from-class/<int:class_id>/<int:job_id>")
+def remove_job_from_class(class_id, job_id):
+    """Remove a job from a class."""
+    if session["code"].isdigit() and session["code"] != "22298":
+        abort(404)
+    with sqlite3.connect("main.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM job_classes WHERE class_id = ? AND job_id = ?",
+            (class_id, job_id),
+        )
+        conn.commit()
+    return redirect(url_for("admin"))
+
+
 @app.post("/update-classes")
 def update_classes():
+    """Update classes from uploaded CSV file."""
     if "file" not in request.files:
         flash("No file part")
         return redirect(request.url)
@@ -205,6 +212,7 @@ def update_classes():
 
 @app.post("/update-jobs")
 def update_jobs():
+    """Update jobs from uploaded CSV file."""
     if "file" not in request.files:
         flash("No file part")
         return redirect(request.url)

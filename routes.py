@@ -1,4 +1,13 @@
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import (
+    Flask,
+    flash,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+    abort,
+)
 from flask.cli import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
 import colorama
@@ -9,6 +18,8 @@ from flask_mail import Mail, Message
 import random
 from werkzeug.utils import secure_filename
 from functools import wraps  # <-- ADDED
+import csv
+
 
 colorama.init(autoreset=True)
 
@@ -27,7 +38,7 @@ app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USE_SSL"] = False
 
 app.config["UPLOAD_FOLDER"] = "static/images/"
-
+app.config["DATA_FOLDER"] = "static/data/"
 mail = Mail(app)
 
 
@@ -52,27 +63,163 @@ def send_email(user_email, key):
     mail.send(msg)
 
 
-def add_class(name, years, rq_classes):
-    conn = sqlite3.connect("main.db")
-    cursor = conn.cursor()
-    for year in years:
-        sql = "INSERT INTO classes(name, year) VALUES(?,?)"
-        cursor.execute(sql, (name, year))
-        conn.commit()
+def add_class(name, years, is_mandatory=False, prerequisites=None):
+    with sqlite3.connect("main.db") as conn:
+        for year in years:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT id FROM classes WHERE name = ? AND year = ?",
+                (name, year),
+            )
+            existing_class = cursor.fetchone()
+            # If the class already exists, update it
+            if existing_class is not None:
+                sql = "UPDATE classes SET name = ?, year = ?, is_mandatory = ?, prerequisites = ? WHERE id = ?"
+                cursor.execute(
+                    sql, (name, year, is_mandatory, prerequisites, existing_class[0])
+                )
+                conn.commit()
+            else:
+                # if the class does not exist, add it
+                sql = "INSERT INTO classes(name, year, is_mandatory, prerequisites) VALUES(?,?,?,?)"
+                cursor.execute(sql, (name, year, is_mandatory, prerequisites))
+                conn.commit()
+
+
+def add_classes_from_file(file_name):
+    with open(file_name, "r", newline="", encoding="utf-8") as file:
+        csv_reader = csv.reader(file)  # Read the header lines
+        # check for errors
+        header = next(csv_reader)
+        for line in csv_reader:
+            name, years_range, is_mandatory, prerequisites = line
+            if "-" in years_range:
+                start_year, end_year = years_range.split("-")
+                years = list(range(int(start_year), int(end_year) + 1))
+            else:
+                years = [int(years_range)]
+
+            is_mandatory = is_mandatory.strip().lower() == "true"
+            add_class(name, years, is_mandatory, prerequisites)
+
+
+def add_job(name, salary_avg, area):
+    with sqlite3.connect("main.db") as conn:
+        cursor = conn.cursor()
         cursor.execute(
-            "SELECT id FROM classes WHERE name = ? AND year = ?", (name, year)
+            "SELECT id FROM jobs WHERE name = ?",
+            (name,),
         )
-        class_id = cursor.fetchone()
-        for rq_class in rq_classes:
-            sql = "INSERT INTO class_classes(class_id, rq_class_id) VALUES(?,?)"
-            cursor.execute(sql, (class_id, rq_class_id))
+        existing_job = cursor.fetchone()
+        # If the job already exists, update it
+        if existing_job is not None:
+            sql = "UPDATE jobs SET salary_avg = ?, area = ? WHERE id = ?"
+            cursor.execute(sql, (salary_avg, area, existing_job[0]))
             conn.commit()
-    conn.close()
+        else:
+            # if the job does not exist, add it
+            sql = "INSERT INTO jobs(name, salary_avg, area) VALUES(?,?,?)"
+            cursor.execute(sql, (name, salary_avg, area))
+            conn.commit()
+
+
+def add_jobs_from_file(file_name):
+    with open(file_name, "r", newline="", encoding="utf-8") as file:
+        csv_reader = csv.reader(file)  # Read the header lines
+        # check for errors
+        header = next(csv_reader)
+        for line in csv_reader:
+            name, avg_salary, area = line
+
+            add_job(name, int(avg_salary), area)
+
+
+# def set_req_classes(class_id, req_class_ids):
+#     conn = sqlite3.connect("main.db")
+#     cursor = conn.cursor()
+#     for req_class_id in req_class_ids:
+#         sql = "INSERT INTO class_classes(class_id, req_class_id) VALUES(?,?)"
+#         cursor.execute(sql, (class_id, req_class_id))
+#         conn.commit()
+#     conn.close()
 
 
 @app.route("/")
 def home():
     return render_template("home.html", header="Home")
+
+
+@app.get("/admin")
+@login_required
+def admin():
+    if not session["code"].isdigit() or session["code"] == "22298":
+        with sqlite3.connect("main.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT id,name,year,is_mandatory,prerequisites FROM classes ORDER BY name, year"
+            )
+            classes = cursor.fetchall()
+        subjects = []
+        for class_ in classes:
+            class_ = list(class_)
+            with sqlite3.connect("main.db") as conn:
+                cursor = conn.cursor()
+                cursor.execute(
+                    "SELECT name FROM jobs WHERE id IN (SELECT job_id FROM job_classes WHERE class_id = ?)",
+                    (class_[0],),
+                )
+                jobs = cursor.fetchall()
+            subjects.append(
+                {
+                    "id": class_[0],
+                    "name": class_[1],
+                    "year": class_[2],
+                    "is_mandatory": class_[3],
+                    "prerequisites": class_[4],
+                    "jobs": [job[0] for job in jobs],
+                }
+            )
+        return render_template("admin.html", header="Admin", subjects=subjects)
+    else:
+        abort(404)
+
+
+@app.post("/update-classes")
+def update_classes():
+    if "file" not in request.files:
+        flash("No file part")
+        return redirect(request.url)
+
+    file = request.files["file"]
+    filename = secure_filename(file.filename)
+
+    if filename and file and file.filename != "":
+        file.save(os.path.join(app.config["DATA_FOLDER"], filename))
+        add_classes_from_file(os.path.join(app.config["DATA_FOLDER"], filename))
+        flash("Classes updated successfully!")
+        return redirect(url_for("admin"))
+    else:
+        flash("No file selected")
+        return redirect(request.url)
+
+
+@app.post("/update-jobs")
+def update_jobs():
+    if "file" not in request.files:
+        flash("No file part")
+        return redirect(request.url)
+
+    file = request.files["file"]
+    filename = secure_filename(file.filename)
+
+    if filename and file and file.filename != "":
+        file.save(os.path.join(app.config["DATA_FOLDER"], filename))
+        add_jobs_from_file(os.path.join(app.config["DATA_FOLDER"], filename))
+        flash("jobs updated successfully!")
+        return redirect(url_for("admin"))
+    else:
+        flash("No file selected")
+        return redirect(request.url)
 
 
 @app.route("/test")
@@ -176,6 +323,7 @@ def login():
         elif check_password_hash(user[2], password):  # hashed password
             session["username"] = username
             session["pfp"] = user[6]  # pfp assumed at index 6
+            session["code"] = user[4]
             return redirect(url_for("home"))
         else:
             error = "Incorrect password."
@@ -197,25 +345,22 @@ def signup():
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
         email = request.form["email"]
-        student_id = request.form["student_id"]
+        code = request.form["code"]
 
         if password != confirm_password:
             error = "Passwords don't match!"
         elif len(password) > 8:
             error = "password is too long!"
-        elif (
-            not email.endswith("@burnside.school.nz")
-            or email.split("@")[0] != student_id
-        ):
+        elif not email.endswith("@burnside.school.nz") or email.split("@")[0] != code:
             error = "Invalid email — must be @burnside and match student ID."
-        elif len(student_id) != 5 or not student_id.isdigit():
+        elif len(code) != 5 or not code.isdigit():
             error = "Invalid student ID"
         else:
             conn = sqlite3.connect("main.db")
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM users WHERE username = ? OR student_id = ?",
-                (username, student_id),
+                "SELECT * FROM users WHERE username = ? OR code = ?",
+                (username, code),
             )
             existing_user = cursor.fetchone()
 
@@ -226,9 +371,9 @@ def signup():
             else:
                 key = random.randint(1000000000, 1000000000000000000)
                 hashed_password = generate_password_hash(password)
-                sql = "INSERT INTO users(username, password, student_id, email, key, is_verified) VALUES(?,?,?,?,?,?)"
+                sql = "INSERT INTO users(username, password, code, email, key, is_verified) VALUES(?,?,?,?,?,?)"
                 cursor.execute(
-                    sql, (username, hashed_password, student_id, email, key, False)
+                    sql, (username, hashed_password, code, email, key, False)
                 )
                 conn.commit()
                 conn.close()
@@ -243,11 +388,10 @@ def signup():
 
 @app.route("/verify/<int:key>")
 def verify(key):
-    conn = sqlite3.connect("main.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE key = ?", (key,))
-    user = cursor.fetchone()
-    conn.close()
+    with sqlite3.connect("main.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE key = ?", (key,))
+        user = cursor.fetchone()
 
     if user is not None:
         conn = sqlite3.connect("main.db")

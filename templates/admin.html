@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/update-classes" method="post" enctype="multipart/form-data">
+        <label for="file">classes</label>
+        <input type="file" name="file" accept=".csv">
+
+
+        <button type="submit"> go! </button>
+    </form>
+
+    <form action="/update-jobs" method="post" enctype="multipart/form-data">
+        <label for="file">jobs</label>
+        <input type="file" name="file" accept=".csv">
+
+        <button type="submit"> go! </button>
+
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>class Name</th>
+                <th>years</th>
+                <th>is_mandatory</th>
+                <th>prerequisites</th>
+                <th>jobs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject in subjects %}
+            <tr>
+                <td>{{ subject[0] }}</td>
+                <td>{{ subject[1] }}</td>
+                <td>{% if subject[2] == 0 %} no {% else %} yes {%endif%}</td>
+                <td>{{ subject[3] }}</td>
+                <td>{{ jobs}} </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</body>
+
+</html>

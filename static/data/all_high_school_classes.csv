@@ -1,0 +1,62 @@
+Course Name,Year,Is_Mandatory,Required_Classes
+English,9-10,True,
+Mathematics,9-10,True,
+Science,9-10,True,
+Social Sciences,9-10,True,
+Health & PE,9-10,True,
+Art,9-10,False,
+Dance,9-10,False,
+Drama,9-10,False,
+Music,9-10,False,
+Design & Visual Communications,9-10,False,
+Digital Technologies,9-10,False,
+Electronics & Robotics,9-10,False,
+Food Technology,9-10,False,
+Mixed Materials Technology,9-10,False,
+Chinese Mandarin,9-10,False,
+French,9-10,False,
+German,9-10,False,
+Japanese,9-10,False,
+Spanish,9-10,False,
+Te Reo Māori,9-10,False,
+Mathematics,11,True,
+Science,11,True,
+English,11,True,
+Commerce,11,False,
+Visual Art,11,False,
+Design & Photography,11,False,
+Cambridge Art,11,False,Art Y10 or HOD approval
+Dance,11,False,
+Drama,11,False,
+Cambridge Music,11,False,
+Contemporary Music,11,False,
+Electronics & Robotics,11,False,
+Food Technology,11,False,
+Hospitality Food Studies,11,False,
+Fashion Design Technology,11,False,
+Software Engineering,11,False,
+Practical Computing,11,False,
+Product & Digital Design,11,False,
+Biology,12,False,L2 Biology incl. one external
+Chemistry,12,False,L2 Chemistry
+Physics,12,False,L2 Physics
+General Science,12,False,L2 Science
+Accounting,12,False,L2 Accounting
+Media Studies,12,False,L2 English
+Contemporary English,12,True,12 credits in L2 English
+Extension English,12,False,"12 credits in L2 English, externals at Merit/Excellence"
+Visual English,12,False,10 credits in L2 English
+Health,12,False,
+Physical Education,12,False,
+Engineering,12,False,Passed Y12 Engineering or HOD approval
+Software Engineering & Computer Science,12,False,
+Design & Visual Communications,12,False,
+Food & Nutrition,12,False,
+Performance Music,12,False,14 credits in 12MUO/12MUC/12PMU
+Calculus,13,False,12 credits in L2 Maths incl. Algebra & Calculus
+Statistics,13,False,12 credits in L2 Maths incl. Probability
+Outdoor Education,13,False,
+Sports Leadership & Performance,13,False,
+Dance,13,False,HOD approval
+Drama,13,False,
+Art History,13,False,

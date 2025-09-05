@@ -19,6 +19,7 @@ import random
 from werkzeug.utils import secure_filename
 from functools import wraps  # <-- ADDED
 import csv
+from flask import jsonify
 
 
 colorama.init(autoreset=True)
@@ -283,6 +284,7 @@ def technology():
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
+    """ User account route with profile picture upload."""
     if request.method == "GET":
         return render_template("account.html", header="account")
 
@@ -313,6 +315,7 @@ def account():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """ User login route with session management."""
     error = None
     if request.method == "POST":
         username = request.form["username"]
@@ -347,6 +350,7 @@ def logout():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    """ User signup route with email verification."""
     error = None
     if request.method == "POST":
         username = request.form["username"]
@@ -396,6 +400,7 @@ def signup():
 
 @app.route("/verify/<int:key>")
 def verify(key):
+    """ Verify user email using the provided key."""
     with sqlite3.connect("main.db") as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE key = ?", (key,))
@@ -410,6 +415,74 @@ def verify(key):
         conn.close()
 
     return render_template("login.html", header="login", error="you are verified")
+
+
+@app.route("/subject-search", methods=["POST"])
+def subject_search():
+    data = request.get_json()
+    term = data.get("term", "").strip().lower()
+    results = {}
+
+    with sqlite3.connect("main.db") as conn:
+        cursor = conn.cursor()
+        # Check if it's a job
+        cursor.execute("SELECT id, name FROM jobs WHERE LOWER(name) LIKE ?", (f"%{term}%",))
+        job = cursor.fetchone()
+        if job:
+            # Get all classes required for this job, including is_mandatory and year
+            cursor.execute("""
+                SELECT c.id, c.name, c.year, c.is_mandatory FROM classes c
+                JOIN job_classes jc ON jc.class_id = c.id
+                WHERE jc.job_id = ?
+                ORDER BY c.year
+            """, (job[0],))
+            classes = cursor.fetchall()
+            results = {
+                "type": "job",
+                "name": job[1],
+                "classes": [
+                    {
+                        "id": c[0],
+                        "name": c[1],
+                        "year": c[2],
+                        "is_mandatory": bool(c[3])
+                    } for c in classes
+                ]
+            }
+            return jsonify(results)
+
+        # Check if it's a class
+        cursor.execute("SELECT id, name FROM classes WHERE LOWER(name) LIKE ?", (f"%{term}%",))
+        class_ = cursor.fetchone()
+        if class_:
+            # Get all jobs that require this class
+            cursor.execute("""
+                SELECT j.name FROM jobs j
+                JOIN job_classes jc ON jc.job_id = j.id
+                WHERE jc.class_id = ?
+            """, (class_[0],))
+            jobs = cursor.fetchall()
+            results = {
+                "type": "class",
+                "name": class_[1],
+                "jobs": [j[0] for j in jobs]
+            }
+            return jsonify(results)
+
+    return jsonify({"type": "none"})
+
+
+@app.route("/class-suggestions")
+def class_suggestions():
+    term = request.args.get("term", "").strip().lower()
+    with sqlite3.connect("main.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT name FROM classes WHERE LOWER(name) LIKE ? ORDER BY name LIMIT 7",
+            (f"%{term}%",),
+        )
+        suggestions = [row[0] for row in cursor.fetchall()]
+    return jsonify(suggestions)
 
 
 if __name__ == "__main__":

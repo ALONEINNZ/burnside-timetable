@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <div>
 </head>
+
 <body>
-    
-       <div class="tech">
+
+    <div class="tech">
         <button><a href="/technology" class="sub">technology</a></button>
     </div>
 
@@ -21,134 +23,137 @@
     </div>
 
 
- 
-    
- <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search for a job or class..." class="search-bar" autocomplete="off">
-    <button class="search-button" onclick="handleSearch()">Search</button>
-    <ul id="suggestions"></ul>
-</div>
-<div id="searchResults"></div>
 
-<div id="selectedClassBox" style="position:fixed;top:20px;left:20px;z-index:999;background:#fff;color:#222;padding:1rem 1.5rem;border-radius:1rem;box-shadow:0 2px 12px rgba(0,0,0,0.15);display:none;min-width:180px;">
-    <span id="selectedClassName"></span>
-    <div id="selectedClassYears" style="font-size:0.95em;color:#1bc47d;"></div>
-</div>
 
-<script>
-function handleSearch() {
-    const searchTerm = document.getElementById('searchInput').value.trim();
-    if (!searchTerm) return;
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for a job or class..." class="search-bar"
+            autocomplete="off">
+        <button class="search-button" onclick="handleSearch()">Search</button>
+        <ul id="suggestions"></ul>
+    </div>
+    <div id="searchResults"></div>
 
-    fetch('/subject-search', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({term: searchTerm})
-    })
-    .then(res => res.json())
-    .then(data => {
-        const resultsDiv = document.getElementById('searchResults');
-        resultsDiv.innerHTML = '';
-        if (data.type === 'job') {
-            let html = `<h3>Classes required for job: <span style="color:#1bc47d">${data.name}</span></h3>`;
-            if (data.classes.length) {
-                html += '<ul>';
-                data.classes.forEach(c => {
-                    html += `<li>
+    <div id="selectedClassBox"
+        style="position:fixed;top:20px;left:20px;z-index:999;background:#fff;color:#222;padding:1rem 1.5rem;border-radius:1rem;box-shadow:0 2px 12px rgba(0,0,0,0.15);display:none;min-width:180px;">
+        <span id="selectedClassName"></span>
+        <div id="selectedClassYears" style="font-size:0.95em;color:#1bc47d;"></div>
+    </div>
+
+    <script>
+        function handleSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            if (!searchTerm) return;
+
+            fetch('/subject-search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ term: searchTerm })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('searchResults');
+                    resultsDiv.innerHTML = '';
+                    if (data.type === 'job') {
+                        let html = `<h3>Classes required for job: <span style="color:#1bc47d">${data.name}</span></h3>`;
+                        if (data.classes.length) {
+                            html += '<ul>';
+                            data.classes.forEach(c => {
+                                html += `<li>
                         <span class="class-link"
                               style="cursor:pointer;color:#1bc47d;text-decoration:underline;"
                               data-id="${c.id}"
                               data-name="${c.name}"
                               data-year="${c.year}"
                               data-mandatory="${c.is_mandatory}">
-                            ${c.name}
+                            ${c.name} 
                         </span>
                         (Year ${c.year})
                         <span style="font-size:0.9em;color:${c.is_mandatory ? '#e74c3c' : '#888'};">
                             ${c.is_mandatory ? 'Mandatory' : 'Optional'}
                         </span>
                     </li>`;
-                });
-                html += '</ul>';
-            } else {
-                html += '<p>No classes found for this job.</p>';
-            }
-            resultsDiv.innerHTML = html;
+                            });
+                            html += '</ul>';
+                        } else {
+                            html += '<p>No classes found for this job.</p>';
+                        }
+                        resultsDiv.innerHTML = html;
 
-            // Add click event to class links
-            document.querySelectorAll('.class-link').forEach(el => {
-                el.onclick = function() {
-                    const className = this.getAttribute('data-name');
-                    const classYear = this.getAttribute('data-year');
-                    const isMandatory = this.getAttribute('data-mandatory') === "true";
-                    showSelectedClass(className, classYear, isMandatory);
-                };
-            });
-        } else if (data.type === 'class') {
-            let html = `<h3>Jobs available with class: <span style="color:#1bc47d">${data.name}</span></h3>`;
-            if (data.jobs.length) {
-                html += '<ul>';
-                data.jobs.forEach(j => {
-                    html += `<li>${j}</li>`;
+                        // Add click event to class links
+                        document.querySelectorAll('.class-link').forEach(el => {
+                            el.onclick = function () {
+                                const className = this.getAttribute('data-name');
+                                const classYear = this.getAttribute('data-year');
+                                const isMandatory = this.getAttribute('data-mandatory') === "true";
+                                showSelectedClass(className, classYear, isMandatory);
+                            };
+                        });
+                    } else if (data.type === 'class') {
+                        let html = `<h3>Jobs available with class: <span style="color:#1bc47d">${data.name}</span></h3>`;
+                        if (data.jobs.length) {
+                            html += '<ul>';
+                            data.jobs.forEach(j => {
+                                html += `<li>${j}</li>`;
+                            });
+                            html += '</ul>';
+                        } else {
+                            html += '<p>No jobs found for this class.</p>';
+                        }
+                        resultsDiv.innerHTML = html;
+                    } else {
+                        resultsDiv.innerHTML = '<p>No results found.</p>';
+                    }
                 });
-                html += '</ul>';
-            } else {
-                html += '<p>No jobs found for this class.</p>';
-            }
-            resultsDiv.innerHTML = html;
-        } else {
-            resultsDiv.innerHTML = '<p>No results found.</p>';
         }
-    });
-}
 
-function showSelectedClass(name, year, isMandatory) {
-    const box = document.getElementById('selectedClassBox');
-    document.getElementById('selectedClassName').innerHTML =
-        `${name} <span style="font-size:0.9em;color:${isMandatory ? '#e74c3c' : '#888'};">
+        function showSelectedClass(name, year, isMandatory) {
+            const box = document.getElementById('selectedClassBox');
+            document.getElementById('selectedClassName').innerHTML =
+                `${name} <span style="font-size:0.9em;color:${isMandatory ? '#e74c3c' : '#888'};">
             (${isMandatory ? 'Mandatory' : 'Optional'})
         </span>`;
-    document.getElementById('selectedClassYears').textContent = `Year: ${year}`;
-    box.style.display = 'block';
-}
+            document.getElementById('selectedClassYears').textContent = `Year: ${year}`;
+            box.style.display = 'block';
+        }
 
-document.getElementById('searchInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        handleSearch();
-    }
-});
-
-const searchInput = document.getElementById('searchInput');
-const suggestionsList = document.getElementById('suggestions');
-
-searchInput.addEventListener('input', function() {
-    const term = this.value.trim();
-    if (!term) {
-        suggestionsList.innerHTML = '';
-        return;
-    }
-    fetch(`/class-suggestions?term=${encodeURIComponent(term)}`)
-        .then(res => res.json())
-        .then(suggestions => {
-            suggestionsList.innerHTML = '';
-            suggestions.forEach(s => {
-                const li = document.createElement('li');
-                li.textContent = s;
-                li.onclick = () => {
-                    searchInput.value = s;
-                    suggestionsList.innerHTML = '';
-                    handleSearch();
-                };
-                suggestionsList.appendChild(li);
-            });
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
         });
-});
 
-document.addEventListener('click', function(e) {
-    if (!suggestionsList.contains(e.target) && e.target !== searchInput) {
-        suggestionsList.innerHTML = '';
-    }
-});
-</script>
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsList = document.getElementById('suggestions');
+
+        searchInput.addEventListener('input', function () {
+            const term = this.value.trim();
+            if (!term) {
+                suggestionsList.innerHTML = '';
+                return;
+            }
+            fetch(`/class-suggestions?term=${encodeURIComponent(term)}`)
+                .then(res => res.json())
+                .then(suggestions => {
+                    suggestionsList.innerHTML = '';
+                    suggestions.forEach(s => {
+                        const li = document.createElement('li');
+                        li.textContent = s;
+                        li.onclick = () => {
+                            searchInput.value = s;
+                            suggestionsList.innerHTML = '';
+                            handleSearch();
+                        };
+                        suggestionsList.appendChild(li);
+                    });
+                });
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!suggestionsList.contains(e.target) && e.target !== searchInput) {
+                suggestionsList.innerHTML = '';
+            }
+        });
+    </script>
 </body>
+
 </html>

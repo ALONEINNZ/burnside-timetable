@@ -51,8 +51,10 @@
                     {% for job in subject["jobs"] %}
                     <div>
                         {{ job[1] }}
-                        <form action="/remove-job-from-class/{{subject['id']}}/{{job[0]}}" method="post"><button
-                                type="submit">x</button></form>
+                        <form class="x_form" action="/remove-job-from-class/{{subject['id']}}/{{job[0]}}" method="post">
+                        </form>
+                        <button class="x_button" type="submit">x</button>
+                        <!-- TODO change css make one button, make the x button acctually work put the button in the form above update doc with the stuff you did!! -->
 
                     </div>
                     {% endfor %}

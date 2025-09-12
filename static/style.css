@@ -131,6 +131,10 @@ form button[type="submit"] {
     text-transform: uppercase;
 }
 
+.plus_dropdown {
+    display: none;
+}
+
 .tech button:hover,
 .sci button:hover,
 .building button:hover,
@@ -431,6 +435,11 @@ form input[type="password"]:focus {
     width: 1.5rem;
 }
 
+
+.job_selection {
+    display: flex;
+    align-items: center;
+}
 
 @media (max-width: 1024px) {
     body {

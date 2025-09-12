@@ -49,22 +49,69 @@
                 <td>{{ subject["prerequisites"] }}</td>
                 <td class="jobs-td">
                     {% for job in subject["jobs"] %}
-                    <div>
+                    <div class="job_selection">
                         {{ job[1] }}
                         <form class="x_form" action="/remove-job-from-class/{{subject['id']}}/{{job[0]}}" method="post">
+
+                            <button class="x_button" type="submit">x</button>
+
                         </form>
-                        <button class="x_button" type="submit">x</button>
                         <!-- TODO change css make one button, make the x button acctually work put the button in the form above update doc with the stuff you did!! -->
 
                     </div>
+
                     {% endfor %}
+                    <button id="{{subject['id']}}" class="plus_button">+</button>
+                    <ul id="{{subject['id']}}" class="plus_dropdown">
+                        {%for job in all_jobs%}
+                        {%if job not in subject["jobs"]%}
+                        <li>
+                            <form class="plus_form" action="/add-job-to-class/{{subject['id']}}/{{job[0]}}"
+                                method="post">
+                                <button class="job_button" type="submit">{{ job[1] }}</button>
+                            </form>
+                        </li>
+                        {%endif%}
+                        {% endfor %}
+
+                    </ul>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
 
     </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all plus buttons and dropdowns
+            const plusButtons = document.querySelectorAll('.plus_button');
+            const dropdowns = document.querySelectorAll('.plus_dropdown');
 
+            plusButtons.forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const id = btn.getAttribute('id');
+                    const dropdown = document.querySelector('.plus_dropdown[id="' + id + '"]');
+                    if (dropdown) {
+                        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                    }
+                });
+            });
+
+            // Optional: close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                plusButtons.forEach(function (btn) {
+                    const id = btn.getAttribute('id');
+                    const dropdown = document.querySelector('.plus_dropdown[id="' + id + '"]');
+                    if (dropdown && dropdown.style.display === 'block') {
+                        if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                            dropdown.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

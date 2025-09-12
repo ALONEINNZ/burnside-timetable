@@ -171,9 +171,29 @@ def admin():
                     "jobs": jobs,
                 }
             )
-        return render_template("admin.html", header="Admin", subjects=subjects)
+        with sqlite3.connect("main.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT id,name FROM jobs ORDER BY name")
+            jobs = cursor.fetchall()
+        return render_template(
+            "admin.html", header="Admin", subjects=subjects, all_jobs=jobs
+        )
     else:
         abort(404)
+
+
+@app.post("/add-job-to-class/<int:class_id>/<int:job_id>")
+def add_job_to_class(class_id, job_id):
+    if session["code"].isdigit() and session["code"] != "22298":
+        abort(404)
+    with sqlite3.connect("main.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT OR IGNORE INTO job_classes(class_id, job_id) VALUES(?, ?)",
+            (class_id, job_id),
+        )
+        conn.commit()
+    return redirect(url_for("admin"))
 
 
 @app.post("/remove-job-from-class/<int:class_id>/<int:job_id>")

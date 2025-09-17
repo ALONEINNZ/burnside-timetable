@@ -1,37 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <div>
+    <title>Subject Selection</title>
+    <link rel="stylesheet" href="/static/style.css">    
 </head>
-
 <body>
+    <header>
+        <div class="header-title">Subject Selection</div>
+        <a href="/" class="nav-btn home-btn" style="position:absolute;left:2rem;top:1.5rem;padding:0.6rem 1.5rem;border-radius:0.7rem;background:#1bc47d;color:#222;font-weight:600;text-decoration:none;box-shadow:0 2px 8px rgba(27,196,125,0.18);">Home</a>
+    </header>
 
-    <div class="tech">
-        <button><a href="/technology" class="sub">technology</a></button>
-    </div>
+    <main class="main-content subject-selection-main">
+        <div class="search-container">
+            <div class="search-row">
+                <input type="text" id="searchInput" placeholder="Search for a job or class..." class="search-bar" autocomplete="off">
+                <button class="search-button" onclick="handleSearch()">Search</button>
+            </div>
+            <ul id="suggestions"></ul>
+            <div id="searchResults"></div>
+            <div id="infoBox"></div>
+        </div>
 
-    <div class="sci">
-        <button><a href="#" class="sub">science</a></button>
-    </div>
+        {% if selected_job %}
+        <div class="results-title">Job: <span class="results-highlight">{{ selected_job.name }}</span></div>
+        <div class="results-subtitle">Classes required for this job:</div>
+        <ul class="results-list-ul">
+            {% for c in classes %}
+            <li class="results-list-item">
+                <a href="/subject/{{ c.id }}" class="results-class-name">{{ c.name }}</a>
+                <span class="results-class-year">(Year {{ c.year }})</span>
+                <span class="results-class-status {% if c.is_mandatory %}mandatory{% else %}optional{% endif %}">
+                    {{ 'Mandatory' if c.is_mandatory else 'Optional' }}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-    <div class="building">
-        <button><a href="!" class="sub">building/construction</a></button>
-    </div>
-
-
-
-
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search for a job or class..." class="search-bar"
-            autocomplete="off">
-        <button class="search-button" onclick="handleSearch()">Search</button>
-        <ul id="suggestions"></ul>
-    </div>
-    <div id="searchResults"></div>
+        {% if selected_class %}
+        <div class="results-title">Class: <span class="results-highlight">{{ selected_class.name }}</span> <span class="results-class-year">(Year {{ selected_class.year }})</span></div>
+        <div class="results-subtitle">Jobs available with this class:</div>
+        <ul class="results-list-ul">
+            {% for j in jobs %}
+            <li class="results-list-item results-job-item">
+                <a href="/subject/job/{{ j.id }}" class="results-class-name">{{ j.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </main>
 
     <div id="selectedClassBox"
         style="position:fixed;top:20px;left:20px;z-index:999;background:#fff;color:#222;padding:1rem 1.5rem;border-radius:1rem;box-shadow:0 2px 12px rgba(0,0,0,0.15);display:none;min-width:180px;">
@@ -49,78 +68,63 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ term: searchTerm })
             })
-                .then(res => res.json())
-                .then(data => {
-                    const resultsDiv = document.getElementById('searchResults');
-                    resultsDiv.innerHTML = '';
-                    if (data.type === 'job') {
-                        let html = `<h3>Classes required for job: <span style="color:#1bc47d">${data.name}</span></h3>`;
-                        if (data.classes.length) {
-                            html += '<ul>';
-                            data.classes.forEach(c => {
-                                html += `<li>
-                        <span class="class-link"
-                              style="cursor:pointer;color:#1bc47d;text-decoration:underline;"
-                              data-id="${c.id}"
-                              data-name="${c.name}"
-                              data-year="${c.year}"
-                              data-mandatory="${c.is_mandatory}">
-                            ${c.name} 
-                        </span>
-                        (Year ${c.year})
-                        <span style="font-size:0.9em;color:${c.is_mandatory ? '#e74c3c' : '#888'};">
-                            ${c.is_mandatory ? 'Mandatory' : 'Optional'}
-                        </span>
-                    </li>`;
-                            });
-                            html += '</ul>';
-                        } else {
-                            html += '<p>No classes found for this job.</p>';
-                        }
-                        resultsDiv.innerHTML = html;
+            .then(res => res.json())
+            .then(data => {
+                const resultsDiv = document.getElementById('searchResults');
+                const infoBox = document.getElementById('infoBox');
+                resultsDiv.innerHTML = '';
+                infoBox.innerHTML = '';
 
-                        // Add click event to class links
-                        document.querySelectorAll('.class-link').forEach(el => {
-                            el.onclick = function () {
-                                const className = this.getAttribute('data-name');
-                                const classYear = this.getAttribute('data-year');
-                                const isMandatory = this.getAttribute('data-mandatory') === "true";
-                                showSelectedClass(className, classYear, isMandatory);
-                            };
+                if (data.type === 'job') {
+                    let html = `<div class="results-title">Job: <span class="results-highlight">${data.name}</span></div>`;
+                    if (data.classes.length) {
+                        html += '<div class="results-subtitle">Classes required for this job:</div><ul class="results-list-ul">';
+                        data.classes.forEach(c => {
+                            html += `<li class="results-list-item">
+                                <span class="class-link results-class-name"
+                                      style="cursor:pointer;text-decoration:underline;"
+                                      data-id="${c.id}"
+                                      data-name="${c.name}"
+                                      data-year="${c.year}"
+                                      data-mandatory="${c.is_mandatory}">
+                                    ${c.name}</span>
+                                <span class="results-class-year">(Year ${c.year})</span>
+                                <span class="results-class-status ${c.is_mandatory ? 'mandatory' : 'optional'}">
+                                    ${c.is_mandatory ? 'Mandatory' : 'Optional'}
+                                </span>
+                            </li>`;
                         });
-                    } else if (data.type === 'class') {
-                        let html = `<h3>Jobs available with class: <span style="color:#1bc47d">${data.name}</span></h3>`;
-                        if (data.jobs.length) {
-                            html += '<ul>';
-                            data.jobs.forEach(j => {
-                                html += `<li>${j}</li>`;
-                            });
-                            html += '</ul>';
-                        } else {
-                            html += '<p>No jobs found for this class.</p>';
-                        }
-                        resultsDiv.innerHTML = html;
-                    } else {
-                        resultsDiv.innerHTML = '<p>No results found.</p>';
-                    }
-                });
-        }
+                        html += '</ul>';
+                    } else html += '<p class="results-empty">No classes found for this job.</p>';
+                    resultsDiv.innerHTML = html;
+                    infoBox.innerHTML = `<div class="info-box-content">Searching for a job. Click a class name for details.</div>`;
 
-        function showSelectedClass(name, year, isMandatory) {
-            const box = document.getElementById('selectedClassBox');
-            document.getElementById('selectedClassName').innerHTML =
-                `${name} <span style="font-size:0.9em;color:${isMandatory ? '#e74c3c' : '#888'};">
-            (${isMandatory ? 'Mandatory' : 'Optional'})
-        </span>`;
-            document.getElementById('selectedClassYears').textContent = `Year: ${year}`;
-            box.style.display = 'block';
-        }
+                    document.querySelectorAll('.class-link').forEach(el => {
+                        el.onclick = function () {
+                            const classId = this.getAttribute('data-id');
+                            window.location.href = `/subject/${classId}`;
+                        };
+                    });
 
-        document.getElementById('searchInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                handleSearch();
-            }
-        });
+                } else if (data.type === 'class') {
+                    let html = `<div class="results-title">Class: <span class="results-highlight">${data.name}</span></div>`;
+                    if (data.jobs.length) {
+                        html += '<div class="results-subtitle">Jobs available with this class:</div><ul class="results-list-ul">';
+                        data.jobs.forEach(j => {
+                            html += `<li class="results-list-item results-job-item">
+                                        <span class="results-class-name" style="cursor:pointer;" onclick="window.location.href='/subject/job/${j.id}'">
+                                        ${j.name}</span>
+                                    </li>`;
+                        });
+                        html += '</ul>';
+                    } else html += '<p class="results-empty">No jobs found for this class.</p>';
+                    resultsDiv.innerHTML = html;
+                    infoBox.innerHTML = `<div class="info-box-content">Searching for a class. Click a job for details.</div>`;
+                } else {
+                    resultsDiv.innerHTML = '<p class="results-empty">No results found.</p>';
+                }
+            });
+        }
 
         const searchInput = document.getElementById('searchInput');
         const suggestionsList = document.getElementById('suggestions');
@@ -155,5 +159,4 @@
         });
     </script>
 </body>
-
 </html>
